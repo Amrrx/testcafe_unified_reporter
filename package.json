@@ -1,6 +1,6 @@
 {
   "name": "testcafe-reporter-unified",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Unified TestCafe reporter plugin.",
   "repository": "https://github.com/Amrrx/testcafe_unified_reporter",
   "type": "commonjs",
