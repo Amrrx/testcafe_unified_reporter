@@ -1,0 +1,25 @@
+{
+    "fields": {
+        "project": {
+            "key": "AVLAUT"
+        },
+        "summary": "Another new test issue",
+        "description": "This is only for testing purpose",
+        "issuetype": {
+            "name": "Bug"
+        },
+        "components": [
+            {
+                "name": "Automation"
+            }
+        ],
+        "priority": {
+            "name": "High"
+        },
+        "labels": [
+            "SystemTest",
+            "BackEnd"
+        ],
+        "customfield_10700": {"id": "10302"}
+    }
+}

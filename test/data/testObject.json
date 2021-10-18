@@ -1,0 +1,140 @@
+{
+   "reportStart": "1970-01-01T00:00:00.000Z",
+   "reportAgent": [
+      "Chrome 41.0.2227 / Mac OS X 10.10.1",
+      "Firefox 47 / Mac OS X 10.10.1"
+   ],
+   "testsCount": 7,
+   "testFixtures": [
+      {
+         "fID": 0.37133184145880316,
+         "name": "First fixture ZZ - 554",
+         "path": "./fixture1.js",
+         "fMeta": {
+            "Project_Name": "AVL Project",
+            "Suite_Name": "AVL Web  Admin.",
+            "MileStone_Name": "Testcafe Integration",
+            "jiraProjectKey": "AVLAUT"
+         },
+         "fTests": [
+            {
+               "tID": 0.464096934400654,
+               "tName": "First test in first fixture",
+               "tMeta": {
+                  "testcase_ID": 15100,
+                  "testPriority": "High",
+                  "targetComponent": "Automation",
+                  "testSeverity": "Major",
+                  "testLabels": [
+                     "SystemTest",
+                     "BackEnd"
+                  ]
+               },
+               "runInfo": {
+                  "errs": [
+                     "2"
+                  ],
+                  "durationMs": 74000,
+                  "unstable": true,
+                  "screenshotPath": "/screenshots/1445437598847",
+                  "videos": [
+                   
+                  ]
+               }
+            },
+            {
+               "tID": 0.464096934400654,
+               "tName": "Second test in first fixture",
+               "tMeta": {
+                  "testcase_ID": 166,
+                  "testPriority": "High",
+                  "targetComponent": "Automation",
+                  "testSeverity": "Major",
+                  "testLabels": [
+                     "SystemTest",
+                     "BackEnd"
+                  ]
+               },
+               "runInfo": {
+                  "errs": [],
+                  "durationMs": 74000,
+                  "unstable": true,
+                  "screenshotPath": "/screenshots/1445437598847",
+                  "videos": [
+                 
+                  ]
+               }
+            }
+         ]
+      },
+      {
+         "fID": 0.37133184145880316,
+         "name": "Second fixture QQ  - 3141",
+         "path": "./fixture1.js",
+         "fMeta": {
+            "Project_Name": "AVL Project",
+            "Suite_Name": "AVL Web  Admin.",
+            "MileStone_Name": "Testcafe Integration",
+            "jiraProjectKey": "AVLAUT"
+         },
+         "fTests": [
+            {
+               "tID": 0.464096934400654,
+               "tName": "First test in Second fixture",
+               "tMeta": {
+                  "testcase_ID": 15569,
+                  "testPriority": "High",
+                  "targetComponent": "Automation",
+                  "testSeverity": "Major",
+                  "testLabels": [
+                     "SystemTest",
+                     "BackEnd"
+                  ]
+               },
+               "runInfo": {
+                  "errs": [],
+                  "durationMs": 74000,
+                  "unstable": true,
+                  "screenshotPath": "/screenshots/1445437598847",
+                  "videos": [
+                  
+                  ]
+               }
+            },
+            {
+               "tID": 0.464096934400654,
+               "tName": "Second test in Second fixture",
+               "tMeta": {
+                  "testcase_ID": 166,
+                  "testPriority": "Low",
+                  "targetComponent": "Automation",
+                  "testSeverity": "Major",
+                  "testLabels": [
+                     "SystemTest",
+                     "BackEnd"
+                  ]
+               },
+               "runInfo": {
+                  "errs": [
+                     ""
+                  ],
+                  "durationMs": 74000,
+                  "unstable": true,
+                  "screenshotPath": "/screenshots/1445437598847",
+                  "videos": [
+                   
+                  ]
+               }
+            }
+         ]
+      }
+   ],
+   "rendTime": "1970-01-01T00:15:25.000Z",
+   "rpassed": 4,
+   "rfailed": 4,
+   "rwarnings": [
+      "Was unable to take a screenshot due to an error.\n\nReferenceError: someVar is not defined",
+      "Was unable to take a screenshot due to an error.\n\nReferenceError: someOtherVar is not defined",
+      "Was unable to take screenshots because the screenshot directory is not specified. To specify it, use the \"-s\" or \"--screenshots\" command line option or the \"screenshots\" method of the test runner in case you are using API."
+   ]
+}
