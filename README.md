@@ -1,4 +1,4 @@
-# testcafe-reporter-unified
+# testcafe-reporter-unifiedd
 
 This is the **Unified** reporter plugin for [TestCafe](http://devexpress.github.io/testcafe).
 
