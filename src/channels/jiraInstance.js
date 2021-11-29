@@ -44,7 +44,8 @@ module.exports = class jiraInstance {
                test.tMeta[this.userConfigs.metaConfig.severityMeta],
                test.tMeta[this.userConfigs.metaConfig.labelsMeta],
                test.tMeta[this.userConfigs.metaConfig.testcaseID],
-               videoPath())
+               videoPath(), test.tErrors,
+               test.tMeta[this.userConfigs.metaConfig.parentMeta])
             issuesList.push(defectObject);
          }
       }

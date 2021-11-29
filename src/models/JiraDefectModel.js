@@ -1,6 +1,6 @@
 "use strict";
 module.exports = class jiraDefectInstance {
-   constructor(projectKey, caseSummery, caseDescr, componentName, priority, severity, labels, testCaseID, attachment) {
+   constructor(projectKey, caseSummery, caseDescr, componentName, priority, severity, labels, testCaseID, attachment, errors, parentKey) {
       this.id = testCaseID
       this.projectKey = projectKey;
       this.title = caseSummery;
@@ -11,6 +11,8 @@ module.exports = class jiraDefectInstance {
       this.labels = labels;
       this.attachment = attachment
       this.jiraKey = null;
+      this.errors = errors;
+      this.parent = parentKey
    }
 
    toRequestPayload() {
@@ -20,9 +22,9 @@ module.exports = class jiraDefectInstance {
                key: this.projectKey,
             },
             summary: "Automated - " + this.title,
-            description: this.description + " \n" + "Auto created defect by Unified reporter v1.0",
+            description: this.description + " \n\n" + "{{Auto created defect by Unified reporter}}",
             issuetype: {
-               name: "Bug",
+               name: "Sub-Bug",
             },
             components: [
                {
@@ -32,9 +34,12 @@ module.exports = class jiraDefectInstance {
             priority: {
                "name": this.priority,
             },
-            labels: this.labels,
-            customfield_10700: { "value": this.severity },
-         },
+            labels: [this.labels],
+            parent:
+            {
+               "key": this.parent
+            },
+         }
       };
    }
 

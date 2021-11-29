@@ -33,7 +33,6 @@ module.exports = {
         async pushDefect(cookies, payload) {
                 const jiraCore = new JiraCore(globalConfigs.jira, this.returnObject.auth)
                 let issuesList = await jiraCore.pushNewIssue(cookies, payload);
-                console.log(await issuesList)
                 return await issuesList
         }
 

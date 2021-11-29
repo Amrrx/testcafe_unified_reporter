@@ -14,9 +14,9 @@ module.exports = class AllureInstance {
             fixture.fTests.forEach((test) => {
                 this.allureReport.createNewTestCase(test.tName, 0)
                 testObject.reportAgent.forEach((agent) => this.allureReport.addTestEnvironment("User Agent", agent))
-                allureCore.addTestDescription(this.getTestCaseDescription(test.tMeta[this.allureConfig.metaConfig.testcaseID]));
+                this.allureReport.addTestDescription(this.getTestCaseDescription(test.tMeta[this.allureConfig.metaConfig.testcaseID]));
                 this.allureReport.addTestLabel('severity', test.tMeta[this.allureConfig.metaConfig.severityMeta]);
-                allureCore.addTestTag(test.tMeta[this.allureConfig.metaConfig.testcaseID])
+                this.allureReport.addTestTag(test.tMeta[this.allureConfig.metaConfig.testcaseID])
                 let testInfo = this.identifyTestCaseStatus(test)
                 this.allureReport.endTestCaseData(testInfo.status, { "message": testInfo.message, "stack": testInfo.stack }, test.runInfo.durationMs)
             })

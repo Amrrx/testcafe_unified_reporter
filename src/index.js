@@ -36,12 +36,13 @@ class TestRun {
       });
    }
 
-   updateFixtureTests(tName, tMeta, tID, info) {
+   updateFixtureTests(tName, tMeta, tID, info, tErr) {
       this.dataObject["testFixtures"][this.dataObject["testFixtures"].length - 1]["fTests"].push({
          tID: tID,
          tName: tName,
          tMeta: tMeta,
          runInfo: info,
+         tErrors: tErr
       });
    }
 
@@ -90,16 +91,49 @@ module.exports = function () {
       reportFixtureStart(name, path, meta) {
          this.currentFixtureName = name;
          this.currentFixtureMeta = meta;
-         this.write(chalk.green('--> ') + `Starting fixture: ${name} ${meta[userconfig.metaConfig.fixtureIDMeta]}`).newline();
+         this.write('\n' + chalk.green('--> ') + `Starting fixture: ${name} ${meta[userconfig.metaConfig.fixtureIDMeta]}`).newline();
          this.reporterHandler.updateFixtures(name, path, meta, Math.random());
       },
 
       async reportTestStart(name, meta) {
-         this.write(chalk.green('--> ') + `Starting test: ${name} (${meta[userconfig.metaConfig.severityMeta]})`).newline();
+         // this.write(chalk.green('--> ') + `Starting test: ${name} (${meta[userconfig.metaConfig.severityMeta]})`).newline();
       },
 
       reportTestDone(name, testRunInfo, meta) {
-         this.reporterHandler.updateFixtureTests(name, meta, Math.random(), testRunInfo);
+         const errors = testRunInfo.errs;
+         const warnings = testRunInfo.warnings;
+         const hasErrors = !!errors.length;
+         const hasWarnings = !!warnings.length;
+         const result = hasErrors ? `failed` : `passed`;
+         const errorsArray = []
+         if (hasErrors) {
+            this.write(`\n` + chalk.red('--> ') + `Finished test: ${name} (${meta[userconfig.metaConfig.priorityMeta]}) ${chalk.red(result)}`).newline();
+            this.newline()
+               .write('Errors:');
+
+            errors.forEach(error => {
+               this.newline()
+                  .write(this.formatError(error));
+               errorsArray.push(this.formatError(error))
+            });
+
+         } else {
+            this.write(`\n` + chalk.green('--> ') + `Finished test: ${name} (${meta[userconfig.metaConfig.priorityMeta]}) ${chalk.green(result)}`).newline();
+         }
+         this.newline()
+         if (hasWarnings) {
+            this.newline()
+               .write('Warnings:');
+
+            warnings.forEach(warning => {
+               this.newline()
+                  .write(warning);
+            });
+
+         }
+         this.newline()
+     
+         this.reporterHandler.updateFixtureTests(name, meta, Math.random(), testRunInfo, errorsArray);
       },
 
       async reportTaskDone(endTime, passed, warnings, result) {
@@ -162,7 +196,8 @@ const returnObject = () => {
          "priorityMeta": "testPriority",
          "severityMeta": "testSeverity",
          "labelsMeta": "testLabels",
-         "fixtureIDMeta": "fixtureID"
+         "fixtureIDMeta": "fixtureID",
+         "parentMeta": "USER_STORY"
       }
    }
 }

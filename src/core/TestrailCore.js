@@ -1,6 +1,7 @@
 "use strict";
 const http = require("axios").default;
 const logger = require("../logger");
+const railExceptions = require("../exceptions/TestRailExceptions")
 module.exports = class TestrailCore {
     constructor(configObject, authConfig) {
         
@@ -39,9 +40,10 @@ module.exports = class TestrailCore {
             logger("Initiating Testrail token status is: " + sd.statusText);
             return requestCookies;
         } catch (error) {
-            console.log(error)
-            logger(await error.response.data, true);
-            console.error(await error.response.data);
+            // console.log(error)
+            // logger(await error.response.data, true);
+            // console.error(await error.response.data);
+            throw new railExceptions.UnableToAuthenticate(error)
         }
     }
 
@@ -56,8 +58,9 @@ module.exports = class TestrailCore {
             let targetProject = await listProjects.data.filter((project) => project.name == projectName);
             return await targetProject[0].id;
         } catch (error) {
-            logger(await error.response.data, true);
-            console.error(await error.response.data);
+            // logger(await error.response.data, true);
+            // console.error(await error.response.data);
+            throw new railExceptions.ProjectNotFound(error)
         }
     }
 
@@ -72,8 +75,9 @@ module.exports = class TestrailCore {
             let targetMileStone = await listMileStones.data.filter((mileStone) => mileStone.name == mileStoneName);
             return await targetMileStone[0].id;
         } catch (error) {
-            logger(await error.response.data, true);
-            console.error(await error.response.data);
+            // logger(await error.response.data, true);
+            // console.error(await error.response.data);
+            throw new railExceptions.MiltestoneNotFound(error)
         }
     }
 
@@ -88,8 +92,9 @@ module.exports = class TestrailCore {
             let targetSuit = await listSuits.data.filter((projectSuite) => projectSuite.name == suitName);
             return await targetSuit[0].id;
         } catch (error) {
-            logger(await error.response.data, true);
-            console.error(await error.response.data);
+            // logger(await error.response.data, true);
+            // console.error(await error.response.data);
+            throw new  railExceptions.SuiteNotFound(error)
         }
     }
 
@@ -103,8 +108,9 @@ module.exports = class TestrailCore {
             });
             return await userDetails.data.id;
         } catch (error) {
-            logger(await error.response.data, true);
-            console.error(await error.response.data);
+            // logger(await error.response.data, true);
+            // console.error(await error.response.data);
+            throw new  railExceptions.UserNotFound(error)
         }
     }
 
@@ -118,8 +124,9 @@ module.exports = class TestrailCore {
             });
             return addRunRequest.data;
         } catch (error) {
-            logger(await error.response.data, true);
-            console.error(await error.response.data);
+            // logger(await error.response.data, true);
+            // console.error(await error.response.data);
+            throw new  railExceptions.UnableToPushNewRun(error)
         }
     }
 
@@ -137,8 +144,9 @@ module.exports = class TestrailCore {
             );
             return addResultsRequest;
         } catch (error) {
-            logger(await error.response.data, true);
-            console.error(await error.response.data);
+            // logger(await error.response.data, true);
+            // console.error(await error.response.data);
+            throw new  railExceptions.UnableToUpdateTestRun(error)
         }
     }
 
@@ -155,8 +163,9 @@ module.exports = class TestrailCore {
             );
             return testCaseData;
         } catch (error) {
-            logger(await error.response.data, true);
-            console.error(await error.response.data);
+            // logger(await error.response.data, true);
+            // console.error(await error.response.data);
+            throw new railExceptions.TestCaseNotFound(error)
         }
     }
 

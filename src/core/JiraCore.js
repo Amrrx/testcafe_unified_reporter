@@ -1,6 +1,7 @@
 "use strict";
 const http = require("axios").default;
 const logger = require("../logger");
+const jiraExceptions = require("../exceptions/JiraExceptions")
 module.exports = class JiraCore {
    constructor(configObject, authConfig) {
       this.jiraConfig = configObject;
@@ -25,11 +26,12 @@ module.exports = class JiraCore {
                },
             }
          );
-         logger("Initiating Jira token status is: " + (sd.status == 200 ? "OK" : "Denied"));
+         logger("Initiating Jira token status is: " + (sd.status == 200 && await sd.headers["set-cookie"] != undefined ? "OK" : "Denied"));
          return await sd.headers["set-cookie"];
       } catch (error) {
-         logger(await error.response.data, true);
-         console.error(await error.response.data);
+         // logger(await error.response.data, true);
+         // console.error(await error.response.data);
+         throw new jiraExceptions.UnableToAuthenticate(error)
       }
    }
 
@@ -44,9 +46,10 @@ module.exports = class JiraCore {
          logger("Defect pushed with key: " + sd.data.key);
          return await sd.data.key;
       } catch (error) {
-         logger("Issue while pushing a new issue on jira");
-         logger(await error.response.data, true);
-         console.error(await error.response.data);
+         // logger("Issue while pushing a new issue on jira");
+         // logger(await error.response.data, true);
+         // console.error(await error.response.data);
+         throw new jiraExceptions.PushNewIssue(error)
       }
    }
 
@@ -63,9 +66,10 @@ module.exports = class JiraCore {
          logger("Defect updated with new attachment");
          return await sd.data;
       } catch (error) {
-         logger("Issue while pushing a new issue on jira");
-         logger(await error.response, true);
-         console.error(await error.response);
+         // logger("Issue while pushing a new issue on jira");
+         // logger(await error.response, true);
+         // console.error(await error.response);
+         throw new jiraExceptions.UpdateIssueAttachment(error)
       }
    }
 }

@@ -32,7 +32,7 @@ module.exports = class TestRailInstance {
    async pushNewRun(token, runObject) {
       for (let testRun of runObject) {
          let runData = await this.railCore.pushNewTestRun(await token.sessionID, await testRun.runInstance.project_ID, await testRun.runInstance.runObject);
-         testRun["runID"] = runData.id;
+         testRun["runID"] = await runData.id;
          logger("Created Run object with: " + "ID: " + runData.id + " ProjectID: " + testRun.runInstance.project_ID);
       }
    }

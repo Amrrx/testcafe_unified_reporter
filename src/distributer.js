@@ -7,6 +7,8 @@ const logger = require("./logger");
 const globalConfigs = require("./config.json");
 const AllureCore = require("./core/AllureCore.js");
 const AllureInstance = require("./channels/AllureInstance.js");
+const railExceptions = require("./exceptions/TestRailExceptions")
+const jiraExceptions = require("./exceptions/JiraExceptions")
 
 module.exports = class Distributer {
    #TEST_OBJECT;
@@ -18,7 +20,7 @@ module.exports = class Distributer {
    allureCore;
    allureInstance;
    constructor(userconfig) {
-      this.userConfigs = userconfig 
+      this.userConfigs = userconfig
    }
 
 
@@ -27,10 +29,19 @@ module.exports = class Distributer {
    }
 
    async startDistributing() {
-      await this.checkMetaData(this.#TEST_OBJECT)
-      await this.distributeToRail(this.#TEST_OBJECT);
-      await this.distributeToJira(this.#TEST_OBJECT);
-      await this.distributeToAllure(this.#TEST_OBJECT);
+      try {
+         await this.checkMetaData(this.#TEST_OBJECT)
+         await this.distributeToRail(this.#TEST_OBJECT);
+         await this.distributeToJira(this.#TEST_OBJECT);
+         await this.distributeToAllure(this.#TEST_OBJECT);
+      } catch (error) {
+         if (error instanceof railExceptions.TestRailErrors || error instanceof jiraExceptions.JiraErrors) {
+            logger(error.name)
+            if (error.message.response != undefined) {
+               console.log(error.message.response.data)
+            }
+         }
+      }
    }
 
    checkMetaData(testObject) {
@@ -38,54 +49,43 @@ module.exports = class Distributer {
    }
 
    async distributeToRail(railTestObject) {
-      try {
-         this.railCore = new TestrailCore(globalConfigs.testrail, this.userConfigs.auth)
-         this.railProcessor = new TestRailInstance(this.railCore, this.userConfigs);
-         this.railToken = await this.railProcessor.createTokenDetails();
-         const runData = await this.railProcessor.prepareRunData(this.railToken, railTestObject);
-         await this.railProcessor.pushNewRun(this.railToken, runData);
-         await this.railProcessor.pushTestResults(this.railToken, runData);
-      } catch (error) {
-         logger(error, true);
-         console.error(error)
-      }
+      this.railCore = new TestrailCore(globalConfigs.testrail, this.userConfigs.auth)
+      this.railProcessor = new TestRailInstance(this.railCore, this.userConfigs);
+      this.railToken = await this.railProcessor.createTokenDetails();
+      const runData = await this.railProcessor.prepareRunData(this.railToken, railTestObject);
+      await this.railProcessor.pushNewRun(this.railToken, runData);
+      await this.railProcessor.pushTestResults(this.railToken, runData);
    }
 
    async distributeToJira(testObject) {
-      try {
-         this.jiraCore = new JiraCore(globalConfigs.jira, this.userConfigs.auth)
-         this.jiraProcessor = new jiraInstance(this.jiraCore, this.userConfigs);
-         let sessionCookies = await this.jiraProcessor.initateAuthenticationToken();
-         let defects = await this.jiraProcessor.extractDefectsFromObject(testObject);
-         let issuesList = await this.jiraProcessor.createIssueObjectList(defects);
-         await this.updateIssuesListWithDescription(issuesList)
-         await this.jiraProcessor.pushEachDefect(await sessionCookies, issuesList);
-         await this.jiraProcessor.updateDefectAttachment(await sessionCookies, issuesList)
-         return true
-      } catch (error) {
-         logger(error, true);
-         console.error(error)
-      }
+      this.jiraCore = new JiraCore(globalConfigs.jira, this.userConfigs.auth)
+      this.jiraProcessor = new jiraInstance(this.jiraCore, this.userConfigs);
+      let sessionCookies = await this.jiraProcessor.initateAuthenticationToken();
+      let defects = await this.jiraProcessor.extractDefectsFromObject(testObject);
+      let issuesList = await this.jiraProcessor.createIssueObjectList(defects);
+      await this.updateIssuesListWithDescription(issuesList)
+      await this.jiraProcessor.pushEachDefect(await sessionCookies, issuesList);
+      await this.jiraProcessor.updateDefectAttachment(await sessionCookies, issuesList)
+      return true
    }
 
    async distributeToAllure(testObject) {
-      try {
-         this.allureCore = new AllureCore(globalConfigs.allure)
-         this.allureInstance = new AllureInstance(this.allureCore, this.userConfigs)
-         this.allureInstance.generateReport(testObject)
-      } catch (error) {
-         logger(error, true);
-         console.error(error)
-      }
+      this.allureCore = new AllureCore(globalConfigs.allure)
+      this.allureInstance = new AllureInstance(this.allureCore, this.userConfigs)
+      this.allureInstance.generateReport(testObject)
    }
 
    async updateIssuesListWithDescription(issuesList) {
       await Promise.all(issuesList.map(async (test) => {
          let testCaseData = await this.railCore.getTestCaseByID(this.railToken.sessionID, test.id);
          test.description =
-            `${testCaseData.data.custom_preconds}\n
-             ${testCaseData.data.custom_steps}\n
-             ${testCaseData.data.custom_expected}`
+            `h3. Steps to produce\n
+            ${testCaseData.data.custom_preconds}\n
+             ${testCaseData.data.custom_steps}\n\n
+             h3. Expected Results\n
+             ${testCaseData.data.custom_expected}\n\n
+             h3. Actual Results:\n
+             {quote}${test.errors.join('\n')}{quote}`
       }))
       return issuesList
    }
@@ -97,7 +97,7 @@ module.exports = class Distributer {
    }
 
    checkTestCaseMeta(testCase) {
-      let testCaseMeta = [this.userConfigs.metaConfig.testcaseID, this.userConfigs.metaConfig.severityMeta, this.userConfigs.metaConfig.componentMeta,
+      let testCaseMeta = [this.userConfigs.metaConfig.testcaseID,  this.userConfigs.metaConfig.componentMeta,
       this.userConfigs.metaConfig.priorityMeta, this.userConfigs.metaConfig.labelsMeta]
       return testCaseMeta.every((metaItem) => Object.keys(testCase.tMeta).includes(metaItem))
    }
