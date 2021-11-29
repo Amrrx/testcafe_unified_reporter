@@ -15,7 +15,7 @@ npm install testcafe-reporter-unified
 ```
 ## Instructions
 
-- Create a (**reporterconfig.json**) file with the following structure 
+- Create a (**reporterconfig.json**) file in your test project root folder with the following structure 
 ```
 {
       "auth": {
