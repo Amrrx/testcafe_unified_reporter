@@ -36,7 +36,8 @@ npm install testcafe-reporter-unified
          "priorityMeta": "testPriority",
          "severityMeta": "testSeverity",
          "labelsMeta": "testLabels",
-         "fixtureIDMeta": "fixtureID"
+         "fixtureIDMeta": "fixtureID",
+         "parentMeta": "USER_STORY"
       }
    }
 ```
