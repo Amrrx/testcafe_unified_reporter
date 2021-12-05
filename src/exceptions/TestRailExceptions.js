@@ -62,7 +62,14 @@ class UnableToUpdateTestRun extends TestRailErrors {
   }
 }
 
+class UnableToGenerateReport extends TestRailErrors {
+  constructor(message) {
+    let su = super(message);
+    this.name = su.name + " - Unable To Generate Report";
+  }
+}
+
 module.exports = {
   TestRailErrors, UnableToUpdateTestRun, UnableToPushNewRun, UserNotFound,
-  TestCaseNotFound, MiltestoneNotFound, SuiteNotFound, ProjectNotFound, UnableToAuthenticate
+  TestCaseNotFound, MiltestoneNotFound, SuiteNotFound, ProjectNotFound, UnableToAuthenticate, UnableToGenerateReport
 }

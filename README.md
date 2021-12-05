@@ -2,6 +2,9 @@
 
 This is the **Unified** reporter plugin for [TestCafe](http://devexpress.github.io/testcafe).
 
+## Version - 1.3
+- Generate testrail report from testrail pre-created report templates
+
 ## Version - 1.2
 - Create test run on test rail for each tested fixture
 - Create defect on jira with the assigned meta data based on the testcase result

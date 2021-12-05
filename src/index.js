@@ -162,7 +162,7 @@ function validateFileExistance() {
 }
 
 function validateFileStructure() {
-   let mandatoryStructure = ["auth", "metaConfig"]
+   let mandatoryStructure = ["auth", "metaConfig", "general"]
    return mandatoryStructure.every((item) => Object.keys(userconfig).includes(item))
 }
 
@@ -198,6 +198,9 @@ const returnObject = () => {
          "labelsMeta": "testLabels",
          "fixtureIDMeta": "fixtureID",
          "parentMeta": "USER_STORY"
+      },
+      "general": {
+          "testrail_report_template": null
       }
    }
 }

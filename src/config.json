@@ -11,7 +11,8 @@
     "gAddNewRun": "/api/v2/add_run",
     "gAddResults": "/api/v2/add_results_for_cases",
     "gGetCurrentUser": "/api/v2/get_user_by_email",
-    "gGetTestCase": "/api/v2/get_case"
+    "gGetTestCase": "/api/v2/get_case",
+    "runReport": "/api/v2/run_report"
   },
   "jira": {
     "gAuthEndPoint": "rest/auth/1/session",

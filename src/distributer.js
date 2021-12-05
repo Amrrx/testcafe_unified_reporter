@@ -55,6 +55,7 @@ module.exports = class Distributer {
       const runData = await this.railProcessor.prepareRunData(this.railToken, railTestObject);
       await this.railProcessor.pushNewRun(this.railToken, runData);
       await this.railProcessor.pushTestResults(this.railToken, runData);
+      await this.railProcessor.runReportTemplate(this.railToken, this.userConfigs.general.testrail_report_template);
    }
 
    async distributeToJira(testObject) {

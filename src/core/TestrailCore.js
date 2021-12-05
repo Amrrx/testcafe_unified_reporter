@@ -17,6 +17,7 @@ module.exports = class TestrailCore {
         this.addNewRun = this.railConfig.gAddNewRun;
         this.addResults = this.railConfig.gAddResults;
         this.getTestCase = this.railConfig.gGetTestCase
+        this.runReport = this.railConfig.runReport;
     }
 
     async initateAuthenticationToken() {
@@ -166,6 +167,25 @@ module.exports = class TestrailCore {
             // logger(await error.response.data, true);
             // console.error(await error.response.data);
             throw new railExceptions.TestCaseNotFound(error)
+        }
+    }
+
+    async runGenerateReport(sessionCookies, reportTemplateID) {
+        try {
+            let reportURL = await http.get(
+                this.baseUrl + this.runReport + "/" + reportTemplateID,
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        Cookie: await sessionCookies,
+                    },
+                }
+            );
+            return reportURL;
+        } catch (error) {
+            // logger(await error.response.data, true);
+            // console.error(await error.response.data);
+            throw new railExceptions.UnableToGenerateReport(error)
         }
     }
 

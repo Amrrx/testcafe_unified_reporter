@@ -44,6 +44,16 @@ module.exports = class TestRailInstance {
       }
    }
 
+   async runReportTemplate(token, reportTemplateID) {
+      if (reportTemplateID != null){
+         await this.railCore.runGenerateReport(await token.sessionID, reportTemplateID);
+         logger("Run Report of " + "Template ID: " + reportTemplateID);
+      }else{
+         logger("No report run identified, skip generating testrail report");
+      }
+   }
+
+
    async #createRunObject(token, fixtureObject) {
       let projectID = await this.railCore.getProjectIDS(await token.sessionID, fixtureObject.fMeta[this.userConfigs.metaConfig.projectMeta]);
       let milestoneID = await this.railCore.getMileStoneID(await token.sessionID, await projectID, fixtureObject.fMeta[this.userConfigs.metaConfig.milestoneMeta]);
