@@ -2,6 +2,10 @@
 
 This is the **Unified** reporter plugin for [TestCafe](http://devexpress.github.io/testcafe).
 
+## Version - 1.4
+- Fix a minor bug in reporting missing metadata
+- Added the ability to mention the missng metadata in fixture and testcase
+
 ## Version - 1.3
 - Generate testrail report from testrail pre-created report templates
 

@@ -62,7 +62,7 @@ class TestRun {
          await reportDistributer.startDistributing();
          logger("Done......");
       } catch (error) {
-         console.log(error);
+         logger(error, true);
       }
    }
 }
@@ -132,7 +132,7 @@ module.exports = function () {
 
          }
          this.newline()
-     
+
          this.reporterHandler.updateFixtureTests(name, meta, Math.random(), testRunInfo, errorsArray);
       },
 
@@ -200,7 +200,7 @@ const returnObject = () => {
          "parentMeta": "USER_STORY"
       },
       "general": {
-          "testrail_report_template": null
+         "testrail_report_template": null
       }
    }
 }

@@ -36,16 +36,18 @@ module.exports = class Distributer {
          await this.distributeToAllure(this.#TEST_OBJECT);
       } catch (error) {
          if (error instanceof railExceptions.TestRailErrors || error instanceof jiraExceptions.JiraErrors) {
-            logger(error.name)
+            logger(error.name, true)
             if (error.message.response != undefined) {
-               console.log(error.message.response.data)
+               logger(error.message.response.data, true)
             }
+         } else {
+            logger(error, true)
          }
       }
    }
 
    checkMetaData(testObject) {
-      if (testObject.testFixtures.every((fixture) => this.checkFixtureMeta(fixture) && fixture.fTests.every((test) => this.checkTestCaseMeta(test)))) return true; else throw "Missing required metadata."
+      if (testObject.testFixtures.every((fixture) => this.checkFixtureMeta(fixture) && fixture.fTests.every((test) => this.checkTestCaseMeta(test)))) return true; else throw "Missing required metadata, unable to complete."
    }
 
    async distributeToRail(railTestObject) {
@@ -94,13 +96,29 @@ module.exports = class Distributer {
    checkFixtureMeta(fixture) {
       let fixtureMetas = [this.userConfigs.metaConfig.projectKeyMeta, this.userConfigs.metaConfig.projectMeta, this.userConfigs.metaConfig.suiteMeta,
       this.userConfigs.metaConfig.milestoneMeta]
-      return fixtureMetas.every((metaItem) => Object.keys(fixture.fMeta).includes(metaItem))
+      return fixtureMetas.every((metaItem) => {
+         if (Object.keys(fixture.fMeta).includes(metaItem)) {
+            return true
+         }
+         else {
+            logger(`${metaItem} is missing from fixture metadata`, true)
+            return false
+         }
+      })
    }
 
    checkTestCaseMeta(testCase) {
-      let testCaseMeta = [this.userConfigs.metaConfig.testcaseID,  this.userConfigs.metaConfig.componentMeta,
+      let testCaseMeta = [this.userConfigs.metaConfig.testcaseID, this.userConfigs.metaConfig.componentMeta,
       this.userConfigs.metaConfig.priorityMeta, this.userConfigs.metaConfig.labelsMeta]
-      return testCaseMeta.every((metaItem) => Object.keys(testCase.tMeta).includes(metaItem))
+      return testCaseMeta.every((metaItem) => {
+         if (Object.keys(testCase.tMeta).includes(metaItem)) {
+            return true
+         }
+         else {
+            logger(`${metaItem} is missing from testcase metadata`, true)
+            return false
+         }
+      })
    }
 };
 
